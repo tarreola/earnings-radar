@@ -1678,10 +1678,10 @@ async function runAnalysis(ticker) {
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': S.keys.anthropic, 'anthropic-beta': 'web-search-2025-03-05' },
+      headers: { 'Content-Type': 'application/json', 'x-api-key': S.keys.anthropic, 'anthropic-beta': 'web-search-2025-03-05', 'anthropic-dangerous-direct-browser-access': 'true' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 2000,
+        max_tokens: 4096,
         system: 'You are a senior quantitative trading analyst. Search the web for real, current financial data. Respond with ONLY a raw valid JSON object. No markdown, no code fences, no text before or after the JSON.',
         tools: [{ type: 'web_search_20250305', name: 'web_search' }],
         messages: [{ role: 'user', content: buildAnalysisPrompt(ticker) }],
@@ -2165,10 +2165,10 @@ async function openNews() {
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': S.keys.anthropic, 'anthropic-beta': 'web-search-2025-03-05' },
+      headers: { 'Content-Type': 'application/json', 'x-api-key': S.keys.anthropic, 'anthropic-beta': 'web-search-2025-03-05', 'anthropic-dangerous-direct-browser-access': 'true' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 500,
+        max_tokens: 1024,
         system: 'Search the web for recent news about the given stock ticker. Return ONLY a JSON array of objects: [{"h":"headline","s":"source · time ago"}]. No markdown. Maximum 6 items.',
         tools: [{ type: 'web_search_20250305', name: 'web_search' }],
         messages: [{ role: 'user', content: `Find the 6 most recent financial news headlines about ${S.activeTicker} stock. Today is ${new Date().toISOString().slice(0,10)}.` }],
