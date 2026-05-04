@@ -1148,6 +1148,7 @@ let wsRetryTimer = null;
 
 function connectFinnhub() {
   if (!S.keys.finnhub) { enterDemoMode(); return; }
+  S.demoMode = false;
   if (ws && ws.readyState === WebSocket.OPEN) return;
   try {
     ws = new WebSocket(`wss://ws.finnhub.io?token=${S.keys.finnhub}`);
@@ -2658,8 +2659,19 @@ function saveKey(which) {
   try { localStorage.setItem('er_keys', JSON.stringify(S.keys)); } catch(e){}
   loadKeyDisplays();
   toast(`${which} key saved`, 'success');
-  if (which === 'finnhub') connectFinnhub();
-  if (which === 'anthropic') document.getElementById('demo-mark').style.display = 'none';
+  if (which === 'finnhub') {
+    S.demoMode = false;
+    S.prices = {};
+    S.sparklines = {};
+    document.getElementById('demo-mark').style.display = 'none';
+    document.getElementById('onboarding-banner')?.remove();
+    connectFinnhub();
+  }
+  if (which === 'anthropic') {
+    S.demoMode = false;
+    document.getElementById('demo-mark').style.display = 'none';
+    document.getElementById('onboarding-banner')?.remove();
+  }
 }
 
 function saveDefaultRange(val) {
